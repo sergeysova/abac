@@ -1,0 +1,485 @@
+{
+  "attributes": {
+    "test.policy": "String",
+    "test.string": "String",
+    "test.int": "Int",
+    "test.other.int": "Int",
+    "test.localTime": "LocalTime"
+  },
+  "globalPolicy": {
+    "onlyOneApplicable": [
+      {
+        "policy": {
+          "name": "String attribute equal value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "string-attribute-equal-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "String attribute equal 'foo'",
+                "target": {
+                  "equal": {
+                    "attr": "test.string",
+                    "value": "foo"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "String attribute not equal value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "string-attribute-not-equal-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "String attribute not equal 'foo'",
+                "target": {
+                  "notEqual": {
+                    "attr": "test.string",
+                    "value": "foo"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute equal value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-equal-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute equal 42",
+                "target": {
+                  "equal": {
+                    "attr": "test.int",
+                    "value": "42"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute not equal value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-not-equal-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute not equal 42",
+                "target": {
+                  "notEqual": {
+                    "attr": "test.int",
+                    "value": "42"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute less than value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-less-than-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute less than 42",
+                "target": {
+                  "lessThan": {
+                    "attr": "test.int",
+                    "value": "42"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute less or equal value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-less-or-equal-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute less or equal 42",
+                "target": {
+                  "lessOrEqual": {
+                    "attr": "test.int",
+                    "value": "42"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute greater than value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-greater-than-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute greater than 42",
+                "target": {
+                  "greaterThan": {
+                    "attr": "test.int",
+                    "value": "42"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute greater or equal value",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-greater-or-equal-value"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute greater or equal 42",
+                "target": {
+                  "greaterOrEqual": {
+                    "attr": "test.int",
+                    "value": "42"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute equal other",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-equal-other"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute equal other",
+                "target": {
+                  "equal": {
+                    "attr1": "test.int",
+                    "attr2": "test.other.int"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute not equal other",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-not-equal-other"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute not equal other",
+                "target": {
+                  "notEqual": {
+                    "attr1": "test.int",
+                    "attr2": "test.other.int"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute less than other",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-less-than-other"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute less than other",
+                "target": {
+                  "lessThan": {
+                    "attr1": "test.int",
+                    "attr2": "test.other.int"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute less or equal other",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-less-or-equal-other"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute less or equal other",
+                "target": {
+                  "lessOrEqual": {
+                    "attr1": "test.int",
+                    "attr2": "test.other.int"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute greater than other",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-greater-than-other"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute greater than other",
+                "target": {
+                  "greaterThan": {
+                    "attr1": "test.int",
+                    "attr2": "test.other.int"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "Int attribute greater or equal other",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "int-attribute-greater-or-equal-other"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "Int attribute greater or equal other",
+                "target": {
+                  "greaterOrEqual": {
+                    "attr1": "test.int",
+                    "attr2": "test.other.int"
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "String attribute in values",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "string-attribute-in-values"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "String attribute in values",
+                "target": {
+                  "in": {
+                    "attr": "test.string",
+                    "values": ["foo", "bar"]
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "A and B",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "a-and-b"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "A and B",
+                "target": {
+                  "and": [
+                    {
+                      "equal": {
+                        "attr": "test.int",
+                        "value": "42"
+                      }
+                    },
+                    {
+                      "equal": {
+                        "attr": "test.other.int",
+                        "value": "42"
+                      }
+                    }
+                  ]
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "A or B",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "a-or-b"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "A or B",
+                "target": {
+                  "or": [
+                    {
+                      "equal": {
+                        "attr": "test.int",
+                        "value": "42"
+                      }
+                    },
+                    {
+                      "equal": {
+                        "attr": "test.other.int",
+                        "value": "42"
+                      }
+                    }
+                  ]
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "policy": {
+          "name": "not A or B",
+          "target": {
+            "equal": {
+              "attr": "test.policy",
+              "value": "not-a"
+            }
+          },
+          "denyUnlessPermit": [
+            {
+              "rule": {
+                "name": "not A",
+                "target": {
+                  "not": {
+                    "equal": {
+                      "attr": "test.int",
+                      "value": "42"
+                    }
+                  }
+                },
+                "effect": "PERMIT"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

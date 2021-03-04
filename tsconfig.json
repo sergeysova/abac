@@ -7,6 +7,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "lib": [
       "ES2015.Iterable",
       "ES2018.AsyncIterable",
@@ -31,7 +32,7 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2017",
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "paths": {},
     "plugins": [],
     "declaration": true,

@@ -1,0 +1,410 @@
+[
+  {
+    "name": "String attribute must be equal value",
+    "context": {
+      "test.policy": "string-attribute-equal-value",
+      "test.string": "foo"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "String attribute must be equal value but it is not equal",
+    "context": {
+      "test.policy": "string-attribute-equal-value",
+      "test.string": "bar"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "String attribute must be not equal value",
+    "context": {
+      "test.policy": "string-attribute-not-equal-value",
+      "test.string": "bar"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "String attribute must be not equal value but it is equal",
+    "context": {
+      "test.policy": "string-attribute-not-equal-value",
+      "test.string": "foo"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be equal value",
+    "context": {
+      "test.policy": "int-attribute-equal-value",
+      "test.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be equal value but it is not equal",
+    "context": {
+      "test.policy": "int-attribute-equal-value",
+      "test.int": "41"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be not equal value",
+    "context": {
+      "test.policy": "int-attribute-not-equal-value",
+      "test.int": "41"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be not equal value but it is equal",
+    "context": {
+      "test.policy": "int-attribute-not-equal-value",
+      "test.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be less than value",
+    "context": {
+      "test.policy": "int-attribute-less-than-value",
+      "test.int": "41"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be less than value but it is equal",
+    "context": {
+      "test.policy": "int-attribute-less-than-value",
+      "test.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be less than value but it is greater",
+    "context": {
+      "test.policy": "int-attribute-less-than-value",
+      "test.int": "43"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be less or equal value and it less",
+    "context": {
+      "test.policy": "int-attribute-less-or-equal-value",
+      "test.int": "41"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be less or equal value and it is equal",
+    "context": {
+      "test.policy": "int-attribute-less-or-equal-value",
+      "test.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be less or equal value but it is greater",
+    "context": {
+      "test.policy": "int-attribute-less-or-equal-value",
+      "test.int": "43"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater than value but it is less",
+    "context": {
+      "test.policy": "int-attribute-greater-than-value",
+      "test.int": "41"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater than value but it is equal",
+    "context": {
+      "test.policy": "int-attribute-greater-than-value",
+      "test.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater than value and it is greater",
+    "context": {
+      "test.policy": "int-attribute-greater-than-value",
+      "test.int": "43"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be greater or equal value and it less",
+    "context": {
+      "test.policy": "int-attribute-greater-or-equal-value",
+      "test.int": "41"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater or equal value and it is equal",
+    "context": {
+      "test.policy": "int-attribute-greater-or-equal-value",
+      "test.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be greater or equal value and it is greater",
+    "context": {
+      "test.policy": "int-attribute-greater-or-equal-value",
+      "test.int": "43"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be equal other",
+    "context": {
+      "test.policy": "int-attribute-equal-other",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be equal other but it is not equal",
+    "context": {
+      "test.policy": "int-attribute-equal-other",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be not equal other",
+    "context": {
+      "test.policy": "int-attribute-not-equal-other",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be not equal other but it is equal",
+    "context": {
+      "test.policy": "int-attribute-not-equal-other",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be less than other",
+    "context": {
+      "test.policy": "int-attribute-less-than-other",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be less than other but it is equal",
+    "context": {
+      "test.policy": "int-attribute-less-than-other",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be less than other but it is greater",
+    "context": {
+      "test.policy": "int-attribute-less-than-other",
+      "test.int": "43",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be less or equal other and it less",
+    "context": {
+      "test.policy": "int-attribute-less-or-equal-other",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be less or equal other and it is equal",
+    "context": {
+      "test.policy": "int-attribute-less-or-equal-other",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be less or equal other but it is greater",
+    "context": {
+      "test.policy": "int-attribute-less-or-equal-other",
+      "test.int": "43",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater than other but it is less",
+    "context": {
+      "test.policy": "int-attribute-greater-than-other",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater than other but it is equal",
+    "context": {
+      "test.policy": "int-attribute-greater-than-other",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater than other and it is greater",
+    "context": {
+      "test.policy": "int-attribute-greater-than-other",
+      "test.int": "43",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be greater or equal other but it less",
+    "context": {
+      "test.policy": "int-attribute-greater-or-equal-other",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "Int attribute must be greater or equal other and it is equal",
+    "context": {
+      "test.policy": "int-attribute-greater-or-equal-other",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "Int attribute must be greater or equal other and it is greater",
+    "context": {
+      "test.policy": "int-attribute-greater-or-equal-other",
+      "test.int": "43",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "String attribute must be in values",
+    "context": {
+      "test.policy": "string-attribute-in-values",
+      "test.string": "foo"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "String attribute must be in values but it is different",
+    "context": {
+      "test.policy": "string-attribute-in-values",
+      "test.string": "baz"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "A and B",
+    "context": {
+      "test.policy": "a-and-b",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "A and B but only A",
+    "context": {
+      "test.policy": "a-and-b",
+      "test.int": "42",
+      "test.other.int": "41"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "A and B but only B",
+    "context": {
+      "test.policy": "a-and-b",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "A and B but neither A no B",
+    "context": {
+      "test.policy": "a-and-b",
+      "test.int": "41",
+      "test.other.int": "41"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "A or B and A and B",
+    "context": {
+      "test.policy": "a-or-b",
+      "test.int": "42",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "A or B and only A",
+    "context": {
+      "test.policy": "a-or-b",
+      "test.int": "42",
+      "test.other.int": "41"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "A or B and only B",
+    "context": {
+      "test.policy": "a-or-b",
+      "test.int": "41",
+      "test.other.int": "42"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "A or B but neither A no B",
+    "context": {
+      "test.policy": "a-or-b",
+      "test.int": "41",
+      "test.other.int": "41"
+    },
+    "expected": "DENY"
+  },
+  {
+    "name": "not A",
+    "context": {
+      "test.policy": "not-a",
+      "test.int": "41"
+    },
+    "expected": "PERMIT"
+  },
+  {
+    "name": "not A but A",
+    "context": {
+      "test.policy": "not-a",
+      "test.int": "42"
+    },
+    "expected": "DENY"
+  }
+]
