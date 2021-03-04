@@ -1,32 +1,60 @@
-import { Schema } from './schema';
+type AttributeType = 'String' | 'Int' | 'Double' | 'Boolean' | 'LocalTime';
 
-type Value = string | number | boolean | Array<string | number | boolean>;
-export type AttributesObjects = { [key: string]: Value | AttributesObjects };
-export type AttributesFlat = Record<string, Value>;
+type AttributeTypeMap = {
+  String: string;
+  Int: number;
+  Double: number;
+  Boolean: boolean;
+  LocalTime: Date;
+};
 
-export function flattenAttributes(attributes: AttributesObjects, parentKey?: string): AttributesFlat {
-  const map = {};
-  for (const key in attributes) {
-    const resultKey = parentKey ? `${parentKey}.${key}` : key;
-    const value = attributes[key];
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      Object.assign(map, flattenAttributes(value, resultKey));
-    } else {
-      map[resultKey] = attributes[key];
+type AttributeJsType<T extends AttributeType> = AttributeTypeMap[T];
+
+export function parseValue(attribute: 'String', value: string): AttributeJsType<'String'> | null;
+export function parseValue(attribute: 'Int', value: string): AttributeJsType<'Int'> | null;
+export function parseValue(attribute: 'Double', value: string): AttributeJsType<'Double'> | null;
+export function parseValue(attribute: 'Boolean', value: string): AttributeJsType<'Boolean'> | null;
+export function parseValue(attribute: 'LocalTime', value: string): AttributeJsType<'LocalTime'> | null;
+export function parseValue(
+  attribute: AttributeType,
+  value: string,
+): AttributeJsType<typeof attribute> | null {
+  switch (attribute) {
+    case 'String': {
+      return value;
+    }
+    case 'Int': {
+      const result = parseInt(value, 10);
+      if (Number.isNaN(result)) {
+        return null;
+      }
+      return result;
+    }
+    case 'Double': {
+      const result = parseFloat(value);
+      if (Number.isNaN(result)) {
+        return null;
+      }
+      return result;
+    }
+    case 'Boolean': {
+      switch (value) {
+        case 'true':
+          return true;
+        case 'false':
+          return false;
+        default:
+          return null;
+      }
+    }
+    case 'LocalTime': {
+      if (Number.isNaN(Date.parse(value))) {
+        return null;
+      }
+      return new Date(value);
     }
   }
-  return map;
-}
 
-/**
- * Return only attributes exits in schema
- */
-export function filterAttributes(attributes: AttributesFlat, schema: Schema): AttributesFlat {
-  const finalAttributes = {};
-  for (const key in schema.attributes) {
-    if (typeof schema.attributes[key] !== 'undefined') {
-      finalAttributes[key] = attributes[key];
-    }
-  }
-  return finalAttributes;
+  // @ts-expect-error If not all cases will be handled in switch, this should fail
+  return null;
 }
