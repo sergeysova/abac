@@ -1,4 +1,3 @@
-import { ParsedAttributes, AttributesDefinition } from './attributes';
 import { Decision } from './desicion';
 import { Distributive } from './distributive';
 
@@ -16,6 +15,8 @@ export interface Applicable<T> {
 }
 
 type Algorithm<T> = (applicable: Applicable<T>, list: T[]) => Decision;
+
+export type AlgorithmObject<T> = Distributive<CombiningAlgorithm, T[]>;
 
 const algorithm: { [K in CombiningAlgorithm]: Algorithm<unknown> } = {
   denyOverrides: (applicable, list) => {
@@ -71,7 +72,7 @@ const algorithm: { [K in CombiningAlgorithm]: Algorithm<unknown> } = {
   },
 };
 
-function findAlgorithm<T>(algos: Distributive<CombiningAlgorithm, T>): [CombiningAlgorithm, T] {
+function findAlgorithm<T>(algos: AlgorithmObject<T>): [CombiningAlgorithm, T[]] {
   if (algos['denyOverrides']) {
     return ['denyOverrides', algos['denyOverrides']];
   }
@@ -91,11 +92,8 @@ function findAlgorithm<T>(algos: Distributive<CombiningAlgorithm, T>): [Combinin
   return ['permitUnlessDeny', algos['permitUnlessDeny']];
 }
 
-export function compileAlgorithm<T>(
-  algos: Distributive<CombiningAlgorithm, T[]>,
-  applicable: Applicable<T>,
-): Decision {
-  const [algoName, list] = findAlgorithm(algos);
-  const algo = algorithm[algoName];
-  return algo(applicable, list);
+export function compileAlgorithm<T>(algos: AlgorithmObject<T>, applicable: Applicable<T>): Decision {
+  const [name, list] = findAlgorithm(algos);
+  const algorithmFn = algorithm[name];
+  return algorithmFn(applicable, list);
 }

@@ -1,28 +1,38 @@
 import { Schema } from './schema';
-import { Decision, Effect } from './desicion';
-import { parseContext } from './attributes';
-import { compileAlgorithm } from './algorithm';
-import { isApplicable } from './policy';
+import { Decision } from './desicion';
+import { AttributesDefinition, parseContext, ParsedAttributes } from './attributes';
+import { AlgorithmObject, compileAlgorithm } from './algorithm';
+import { isPolicy, Policy } from './policy';
 import { calculate } from './expression';
+import { Rule } from './rule';
 
 type Context = Record<string, string>;
 
-export function check(context: Context, schema: Schema): Decision {
-  const parsedContext = parseContext(context, schema.attributes);
-  const desicion = compileAlgorithm(schema.globalPolicy, {
-    isApplicable(policy) {
-      return isApplicable(schema.attributes, parsedContext, policy);
+function compile(
+  attributes: AttributesDefinition,
+  context: ParsedAttributes,
+  algos: AlgorithmObject<Policy | Rule>,
+): Decision {
+  return compileAlgorithm(algos, {
+    isApplicable(set) {
+      if (isPolicy(set)) return calculate(attributes, context, set.policy.target);
+      return calculate(attributes, context, set.rule.target);
     },
-    calculate({ policy }) {
-      return compileAlgorithm(policy, {
-        isApplicable(rule) {
-          return calculate(schema.attributes, parsedContext, rule.rule.target);
-        },
-        calculate(rule) {
-          return rule.rule.effect;
-        },
-      });
+    calculate(set) {
+      if (isPolicy(set)) {
+        return compile(attributes, context, set.policy);
+      }
+
+      if (calculate(attributes, context, set.rule.target)) {
+        return set.rule.effect;
+      }
+
+      return 'NOT_APPLICABLE';
     },
   });
-  return desicion;
+}
+
+export function check(context: Context, schema: Schema): Decision {
+  const contextParsed = parseContext(context, schema.attributes);
+  return compile(schema.attributes, contextParsed, schema.globalPolicy);
 }
