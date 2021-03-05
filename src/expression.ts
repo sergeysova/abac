@@ -49,9 +49,9 @@ export function calculate(
   if (isOr(expression)) {
     for (const expr of expression.or) {
       const result = calculate(attributes, context, expr);
-      if (result === false) return false;
+      if (result === true) return true;
     }
-    return true;
+    return false;
   }
   if (isIn(expression)) {
     const type = attributeType(attributes, expression.in.attr);
