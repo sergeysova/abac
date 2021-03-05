@@ -1,11 +1,9 @@
-import { AttributeType } from './attributes';
+import { AttributesDefinition } from './attributes';
 import { CombiningAlgorithm } from './algorithm';
 import { Policy } from './policy';
 import { Distributive } from './distributive';
 
-export type Attributes = Record<string, AttributeType>;
-
 export type Schema = {
-  attributes: Attributes;
+  attributes: AttributesDefinition;
   globalPolicy: Distributive<CombiningAlgorithm, Policy[]>;
 };

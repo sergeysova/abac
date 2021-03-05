@@ -1,3 +1,4 @@
+export type AttributesDefinition = Record<string, AttributeType>;
 export type AttributeType = 'String' | 'Int' | 'Double' | 'Boolean' | 'LocalTime';
 
 type AttributeTypeMap = {
@@ -9,6 +10,8 @@ type AttributeTypeMap = {
 };
 
 type AttributeJsType<T extends AttributeType> = AttributeTypeMap[T];
+
+export type ParsedAttributes = Record<string, AttributeJsType<AttributeType>>;
 
 export function parseValue(
   attribute: AttributeType,
