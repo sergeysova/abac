@@ -1,4 +1,4 @@
-type AttributeType = 'String' | 'Int' | 'Double' | 'Boolean' | 'LocalTime';
+export type AttributeType = 'String' | 'Int' | 'Double' | 'Boolean' | 'LocalTime';
 
 type AttributeTypeMap = {
   String: string;
