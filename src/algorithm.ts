@@ -10,36 +10,66 @@ export type CombiningAlgorithm =
   | 'permitUnlessDeny';
 
 export interface Applicable {
-  isApplicable(): boolean;
-  calculate(): Decision;
+  isApplicable(attributes: AttributesDefinition, context: ParsedAttributes): boolean;
+  calculate(attributes: AttributesDefinition, context: ParsedAttributes): Decision;
 }
 
-type Algorithm<T extends Applicable> = (
+type Algorithm = (
   attributes: AttributesDefinition,
   context: ParsedAttributes,
-  applicables: T[],
+  applicables: Applicable[],
 ) => Decision;
 
-export const algorithm: { [K in CombiningAlgorithm]: Algorithm<any> } = {
-  denyOverrides: (attributes, context, applicables) => 'DENY',
-  denyUnlessPermit: (attributes, context, applicables) => 'DENY',
+export const algorithm: { [K in CombiningAlgorithm]: Algorithm } = {
+  denyOverrides: (attributes, context, applicables) => {
+    let latest: Decision = 'NOT_APPLICABLE';
+    for (const applicable of applicables) {
+      if (applicable.isApplicable(attributes, context)) {
+        latest = applicable.calculate(attributes, context);
+        if (latest === 'DENY') return 'DENY';
+      }
+    }
+    return latest;
+  },
+  denyUnlessPermit: (attributes, context, applicables) => {
+    for (const applicable of applicables) {
+      if (applicable.isApplicable(attributes, context)) {
+        const desicion = applicable.calculate(attributes, context);
+        if (desicion === 'PERMIT') return 'PERMIT';
+      }
+    }
+    return 'DENY';
+  },
   firstApplicable: (attributes, context, applicables) => {
-    const applicable = applicables.find((appl) => appl.isApplicable(attributes, context, appl));
+    const applicable = applicables.find((appl) => appl.isApplicable(attributes, context));
     if (applicable) {
-      // Calculate desicion
+      return applicable.calculate(attributes, context);
     }
 
     return 'NOT_APPLICABLE';
   },
   onlyOneApplicable: (attributes, context, applicables) => {
-    const found = applicables.filter((appl) => appl.isApplicable(attributes, context, appl));
+    const found = applicables.filter((appl) => appl.isApplicable(attributes, context));
     if (found.length !== 1) return 'DENY';
-
-    // Calculate desicion
-    return 'DENY';
+    return found[0].calculate(attributes, context);
   },
-  permitOverrides: (attributes, context, applicables) => 'DENY',
-  permitUnlessDeny: (attributes, context, applicables) => 'DENY',
+  permitOverrides: (attributes, context, applicables) => {
+    let latest: Decision = 'NOT_APPLICABLE';
+    for (const applicable of applicables) {
+      if (applicable.isApplicable(attributes, context)) {
+        latest = applicable.calculate(attributes, context);
+        if (latest === 'PERMIT') return 'PERMIT';
+      }
+    }
+    return latest;
+  },
+  permitUnlessDeny: (attributes, context, applicables) => {
+    for (const applicable of applicables) {
+      if (applicable.isApplicable(attributes, context)) {
+        const desicion = applicable.calculate(attributes, context);
+        if (desicion === 'DENY') return 'DENY';
+      }
+    }
+    return 'PERMIT';
+  },
 };
-
-export function extractAlgorithm() {}
