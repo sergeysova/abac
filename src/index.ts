@@ -1,8 +1,7 @@
-import { parseValue } from './attributes';
+import { Schema } from './schema';
+import { Effect } from './desicion';
+export type AttributesObject = Record<string, string>;
 
-const d = parseValue('Boolean', 'true');
-
-export function check(attributesObject: AttributesObjects, schema: Schema): Effect {
-  const attributes = filterAttributes(flattenAttributes(attributesObject), schema);
+export function check(attributesObject: AttributesObject, schema: Schema): Effect {
   return 'DENY';
 }

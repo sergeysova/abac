@@ -8,23 +8,21 @@ export type CompareVariant =
   | 'greaterThan'
   | 'greaterOrEqual';
 
-export type CompareExpr_ = {
-  [C in CompareVariant]: {
-    attr: string;
-    value: string;
-  };
-};
+type AttrToValue = { attr: string; value: string };
+type AttrToValues = { attr: string; values: string[] };
+type AttrToAttr = { attr1: string; attr2: string };
 
-export type CompareExpr = Distributive<
-  CompareVariant,
-  {
-    attr: string;
-    value: string;
-  }
->;
+export type CompareExpr = Distributive<CompareVariant, AttrToValue | AttrToAttr>;
 
-export type BooleanExpr = Distributive<'and' | 'or', (BooleanExpr | CompareExpr | NotExpr)[]>;
+/** Check several expressions */
+export type BooleanExpr = Distributive<'and' | 'or', Expr[]>;
 
-export type NotExpr = { not: (BooleanExpr | CompareExpr)[] };
+/** Check attribute to several values */
+export type InExpr = { in: AttrToValues };
 
-export type Expr = CompareExpr | BooleanExpr | NotExpr;
+/** Invert comparison results, cannot nest not: { not: {} } */
+export type NotExpr = { not: RegularExpr };
+
+export type RegularExpr = CompareExpr | BooleanExpr | InExpr;
+
+export type Expr = RegularExpr | NotExpr;
