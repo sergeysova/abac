@@ -1,5 +1,6 @@
 import { ParsedAttributes, AttributesDefinition } from './attributes';
 import { Decision } from './desicion';
+import { Distributive } from './distributive';
 
 export type CombiningAlgorithm =
   | 'denyOverrides'
@@ -9,67 +10,92 @@ export type CombiningAlgorithm =
   | 'permitOverrides'
   | 'permitUnlessDeny';
 
-export interface Applicable {
-  isApplicable(attributes: AttributesDefinition, context: ParsedAttributes): boolean;
-  calculate(attributes: AttributesDefinition, context: ParsedAttributes): Decision;
+export interface Applicable<T> {
+  isApplicable(value: T): boolean;
+  calculate(value: T): Decision;
 }
 
-type Algorithm = (
-  attributes: AttributesDefinition,
-  context: ParsedAttributes,
-  applicables: Applicable[],
-) => Decision;
+type Algorithm<T> = (applicable: Applicable<T>, list: T[]) => Decision;
 
-export const algorithm: { [K in CombiningAlgorithm]: Algorithm } = {
-  denyOverrides: (attributes, context, applicables) => {
+const algorithm: { [K in CombiningAlgorithm]: Algorithm<unknown> } = {
+  denyOverrides: (applicable, list) => {
     let latest: Decision = 'NOT_APPLICABLE';
-    for (const applicable of applicables) {
-      if (applicable.isApplicable(attributes, context)) {
-        latest = applicable.calculate(attributes, context);
+    for (const item of list) {
+      if (applicable.isApplicable(item)) {
+        latest = applicable.calculate(item);
         if (latest === 'DENY') return 'DENY';
       }
     }
     return latest;
   },
-  denyUnlessPermit: (attributes, context, applicables) => {
-    for (const applicable of applicables) {
-      if (applicable.isApplicable(attributes, context)) {
-        const desicion = applicable.calculate(attributes, context);
+  denyUnlessPermit: (applicable, list) => {
+    for (const item of list) {
+      if (applicable.isApplicable(item)) {
+        const desicion = applicable.calculate(item);
         if (desicion === 'PERMIT') return 'PERMIT';
       }
     }
     return 'DENY';
   },
-  firstApplicable: (attributes, context, applicables) => {
-    const applicable = applicables.find((appl) => appl.isApplicable(attributes, context));
-    if (applicable) {
-      return applicable.calculate(attributes, context);
+  firstApplicable: (applicable, list) => {
+    const found = list.find((item) => applicable.isApplicable(item));
+    if (found) {
+      return applicable.calculate(found);
     }
 
     return 'NOT_APPLICABLE';
   },
-  onlyOneApplicable: (attributes, context, applicables) => {
-    const found = applicables.filter((appl) => appl.isApplicable(attributes, context));
+  onlyOneApplicable: (applicable, list) => {
+    const found = list.filter((item) => applicable.isApplicable(item));
     if (found.length !== 1) return 'DENY';
-    return found[0].calculate(attributes, context);
+    return applicable.calculate(found[0]);
   },
-  permitOverrides: (attributes, context, applicables) => {
+  permitOverrides: (applicable, list) => {
     let latest: Decision = 'NOT_APPLICABLE';
-    for (const applicable of applicables) {
-      if (applicable.isApplicable(attributes, context)) {
-        latest = applicable.calculate(attributes, context);
+    for (const item of list) {
+      if (applicable.isApplicable(item)) {
+        latest = applicable.calculate(item);
         if (latest === 'PERMIT') return 'PERMIT';
       }
     }
     return latest;
   },
-  permitUnlessDeny: (attributes, context, applicables) => {
-    for (const applicable of applicables) {
-      if (applicable.isApplicable(attributes, context)) {
-        const desicion = applicable.calculate(attributes, context);
+  permitUnlessDeny: (applicable, list) => {
+    for (const item of list) {
+      if (applicable.isApplicable(item)) {
+        const desicion = applicable.calculate(item);
         if (desicion === 'DENY') return 'DENY';
       }
     }
     return 'PERMIT';
   },
 };
+
+function findAlgorithm<T>(algos: Distributive<CombiningAlgorithm, T>): [CombiningAlgorithm, T] {
+  if (algos['denyOverrides']) {
+    return ['denyOverrides', algos['denyOverrides']];
+  }
+  if (algos['denyUnlessPermit']) {
+    return ['denyUnlessPermit', algos['denyUnlessPermit']];
+  }
+  if (algos['firstApplicable']) {
+    return ['firstApplicable', algos['firstApplicable']];
+  }
+  if (algos['onlyOneApplicable']) {
+    return ['onlyOneApplicable', algos['onlyOneApplicable']];
+  }
+  if (algos['permitOverrides']) {
+    return ['permitOverrides', algos['permitOverrides']];
+  }
+
+  return ['permitUnlessDeny', algos['permitUnlessDeny']];
+}
+
+export function compileAlgorithm<T>(
+  algos: Distributive<CombiningAlgorithm, T[]>,
+  applicable: Applicable<T>,
+): Decision {
+  const [algoName, list] = findAlgorithm(algos);
+  const algo = algorithm[algoName];
+  return algo(applicable, list);
+}

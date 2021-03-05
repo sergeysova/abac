@@ -11,7 +11,7 @@ type AttributeTypeMap = {
 
 type AttributeJsType<T extends AttributeType> = AttributeTypeMap[T];
 
-export type ParsedAttributes = Record<string, AttributeJsType<AttributeType>>;
+export type ParsedAttributes = Record<string, AttributeJsType<AttributeType> | null>;
 
 export function parseValue(
   attribute: AttributeType,
@@ -55,4 +55,17 @@ export function parseValue(
 
   // @ts-expect-error If not all cases will be handled in switch, this should fail
   return null;
+}
+
+export function parseContext(
+  context: Record<string, string>,
+  definition: AttributesDefinition,
+): ParsedAttributes {
+  const result: ParsedAttributes = {};
+
+  for (const key in definition) {
+    result[key] = parseValue(definition[key], context[key]);
+  }
+
+  return result;
 }
