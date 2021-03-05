@@ -19,6 +19,9 @@
     "based",
     "access"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Sergey Sova <mail@sergeysova.com> (https://sova.dev)",
   "license": "MIT",
   "bugs": {
