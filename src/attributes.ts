@@ -10,11 +10,6 @@ type AttributeTypeMap = {
 
 type AttributeJsType<T extends AttributeType> = AttributeTypeMap[T];
 
-export function parseValue(attribute: 'String', value: string): AttributeJsType<'String'> | null;
-export function parseValue(attribute: 'Int', value: string): AttributeJsType<'Int'> | null;
-export function parseValue(attribute: 'Double', value: string): AttributeJsType<'Double'> | null;
-export function parseValue(attribute: 'Boolean', value: string): AttributeJsType<'Boolean'> | null;
-export function parseValue(attribute: 'LocalTime', value: string): AttributeJsType<'LocalTime'> | null;
 export function parseValue(
   attribute: AttributeType,
   value: string,
@@ -25,14 +20,14 @@ export function parseValue(
     }
     case 'Int': {
       const result = parseInt(value, 10);
-      if (Number.isNaN(result)) {
+      if (!Number.isFinite(result) || String(result) !== value) {
         return null;
       }
       return result;
     }
     case 'Double': {
       const result = parseFloat(value);
-      if (Number.isNaN(result)) {
+      if (!Number.isFinite(result) || String(result) !== value) {
         return null;
       }
       return result;
