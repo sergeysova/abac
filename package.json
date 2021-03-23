@@ -1,12 +1,13 @@
 {
   "name": "can-you",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An abstract attribute-based access control for TypeScript application",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "babel -x .ts -d ./dist ./src && ",
-    "test": "jest"
+    "build": "rm -rf dist && babel -x .ts --ignore '*.test.js' -d ./dist ./src && tsc",
+    "test": "jest",
+    "prepublishOnly": "yarn build"
   },
   "repository": {
     "type": "git",
