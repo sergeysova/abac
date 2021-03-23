@@ -7,6 +7,8 @@ import { calculate } from './expression';
 import { Rule } from './rule';
 
 type Context = Record<string, string>;
+export type { Schema, AttributesDefinition };
+export type AttributesValues = ParsedAttributes;
 
 function compile(
   attributes: AttributesDefinition,
