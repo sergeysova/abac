@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sergeysova/abac.git"
+    "url": "git+https://github.com/sergeysova/can-you.git"
   },
   "keywords": [
     "abac",
@@ -26,9 +26,9 @@
   "author": "Sergey Sova <mail@sergeysova.com> (https://sova.dev)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sergeysova/abac/issues"
+    "url": "https://github.com/sergeysova/can-you/issues"
   },
-  "homepage": "https://github.com/sergeysova/abac#readme",
+  "homepage": "https://github.com/sergeysova/can-you#readme",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
