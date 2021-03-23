@@ -1,5 +1,5 @@
 {
-  "name": "@sergeysova/abac",
+  "name": "can-you",
   "version": "0.1.0",
   "description": "An abstract attribute-based access control for TypeScript application",
   "main": "dist/index.js",
