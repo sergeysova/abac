@@ -1,96 +1,66 @@
-import { filterAttributes, flattenAttributes } from './attributes';
+import { parseValue } from './attributes';
 
-test('flattening for simple object', () => {
-  const source = {
-    foo: 1,
-    bar: '2',
-    baz: false,
-  };
+test('Int', () => {
+  expect(parseValue('Int', '123')).toBe(123);
+  expect(parseValue('Int', '-123')).toBe(-123);
+  expect(parseValue('Int', '0')).toBe(0);
 
-  expect(flattenAttributes(source)).toMatchInlineSnapshot(`
-    Object {
-      "bar": "2",
-      "baz": false,
-      "foo": 1,
-    }
-  `);
+  expect(parseValue('Int', '')).toBe(null);
+  expect(parseValue('Int', 'abc')).toBe(null);
+  expect(parseValue('Int', '1.1')).toBe(null);
+  expect(parseValue('Int', 'Infinity')).toBe(null);
+  expect(parseValue('Int', 'NaN')).toBe(null);
 });
 
-test('flattening for 2-level object', () => {
-  const source = {
-    foo: 1,
-    bar: '2',
-    baz: {
-      raz: 2,
-      naz: true,
-    },
-  };
+test('Double', () => {
+  expect(parseValue('Double', '123')).toBe(123);
+  expect(parseValue('Double', '-123')).toBe(-123);
+  expect(parseValue('Double', '0')).toBe(0);
+  expect(parseValue('Double', '1.1')).toBe(1.1);
+  expect(parseValue('Double', '-1.1')).toBe(-1.1);
+  expect(parseValue('Double', '1.10000000001')).toBe(1.10000000001);
 
-  expect(flattenAttributes(source)).toMatchInlineSnapshot(`
-    Object {
-      "bar": "2",
-      "baz.naz": true,
-      "baz.raz": 2,
-      "foo": 1,
-    }
-  `);
+  expect(parseValue('Double', '')).toBe(null);
+  expect(parseValue('Double', 'abc')).toBe(null);
+  expect(parseValue('Double', 'Infinity')).toBe(null);
+  expect(parseValue('Double', 'NaN')).toBe(null);
 });
 
-test('flattening for 3-level object', () => {
-  const source = {
-    foo: 1,
-    bar: '2',
-    resource: {
-      raz: 2,
-      micro: {
-        id: 'asoufhsidufhb',
-      },
-    },
-  };
-
-  expect(flattenAttributes(source)).toMatchInlineSnapshot(`
-    Object {
-      "bar": "2",
-      "foo": 1,
-      "resource.micro.id": "asoufhsidufhb",
-      "resource.raz": 2,
-    }
-  `);
+test('String', () => {
+  expect(parseValue('String', '')).toBe('');
+  expect(parseValue('String', '123')).toBe('123');
+  expect(parseValue('String', '-123')).toBe('-123');
+  expect(parseValue('String', '0')).toBe('0');
+  expect(parseValue('String', '1.1')).toBe('1.1');
+  expect(parseValue('String', '-1.1')).toBe('-1.1');
+  expect(parseValue('String', '1.10000000001')).toBe('1.10000000001');
+  expect(parseValue('String', 'abc')).toBe('abc');
+  expect(parseValue('String', 'Infinity')).toBe('Infinity');
+  expect(parseValue('String', 'NaN')).toBe('NaN');
 });
 
-test('flattening for 4-level object', () => {
-  const source = {
-    foo: {
-      bar: {
-        baz: {
-          bad: false,
-        },
-      },
-    },
-  };
+test('Boolean', () => {
+  expect(parseValue('Boolean', 'true')).toBe(true);
+  expect(parseValue('Boolean', 'false')).toBe(false);
 
-  expect(flattenAttributes(source)).toMatchInlineSnapshot(`
-    Object {
-      "foo.bar.baz.bad": false,
-    }
-  `);
+  expect(parseValue('Boolean', '')).toBe(null);
+  expect(parseValue('Boolean', 'True')).toBe(null);
+  expect(parseValue('Boolean', 'False')).toBe(null);
+  expect(parseValue('Boolean', 'On')).toBe(null);
+  expect(parseValue('Boolean', 'Off')).toBe(null);
+  expect(parseValue('Boolean', '1')).toBe(null);
+  expect(parseValue('Boolean', '0')).toBe(null);
 });
 
-test('filterAttributes', () => {
-  const schema = {
-    attributes: {
-      'subject.id': 'String',
-      'resource.ownerId': 'String',
-    },
-    policies: { firstApplicable: [] },
-  };
-  const attributes = flattenAttributes({
-    subject: { id: 'qwe', name: 'Sova' },
-    resource: { ownerId: 'qwe', type: 'Demo' },
-  });
+test('LocalTime', () => {
+  expect(parseValue('LocalTime', '2019-01-09')).toEqual(new Date('2019-01-09'));
+  expect(parseValue('LocalTime', '2020-01-01T10:30:00')).toEqual(new Date('2020-01-01T10:30:00'));
+  expect(parseValue('LocalTime', '1')).toEqual(new Date('2000-12-31T21:00:00.000Z'));
+  expect(parseValue('LocalTime', '0')).toEqual(new Date('1999-12-31T21:00:00.000Z'));
 
-  expect(filterAttributes(attributes, schema)).toEqual({
-    'subject.id': 'qwe',
-    'resource.ownerId': 'qwe',
-  });
+  expect(parseValue('LocalTime', '')).toBe(null);
+  expect(parseValue('LocalTime', 'True')).toBe(null);
+  expect(parseValue('LocalTime', 'False')).toBe(null);
+  expect(parseValue('LocalTime', 'On')).toBe(null);
+  expect(parseValue('LocalTime', 'Off')).toBe(null);
 });

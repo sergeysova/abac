@@ -2,8 +2,8 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
-    "baseUrl": "src",
     "outDir": "dist",
+    "rootDir": "src",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -38,5 +38,5 @@
     "declaration": true,
     "emitDeclarationOnly": true
   },
-  "exclude": ["dist", "babel.config.js", "jest.config.ts"]
+  "exclude": ["dist", "babel.config.js", "jest.config.ts", "tests", "*.test.ts"]
 }
